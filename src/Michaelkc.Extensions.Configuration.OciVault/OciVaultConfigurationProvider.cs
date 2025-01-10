@@ -10,6 +10,7 @@ namespace Michaelkc.Extensions.Configuration.OciVault;
 
 public class OciVaultConfigurationProvider : ConfigurationProvider
 {
+    private const int PageSize = 50;
     private readonly SecretsClient _secretsClient;
     private readonly VaultsClient _vaultsClient;
     private readonly OciVaultConfigurationOptions _vaultOptions;
@@ -31,28 +32,29 @@ public class OciVaultConfigurationProvider : ConfigurationProvider
         var listSecretsRequest = new ListSecretsRequest
         {
             CompartmentId = _vaultOptions.CompartmentId,
-            VaultId = _vaultOptions.VaultId
+            VaultId = _vaultOptions.VaultId,
+            Limit=PageSize,
         };
-        var secrets = await _vaultsClient.ListSecrets(listSecretsRequest).ConfigureAwait(false);
+        var data = new Dictionary<string, string?>();
+        do
+        {
+            var secrets = await _vaultsClient.ListSecrets(listSecretsRequest).ConfigureAwait(false);
 
+            foreach (var secret in secrets.Items)
+            {
+                var secretBundle = await _secretsClient.GetSecretBundleByName(new GetSecretBundleByNameRequest
+                {
+                    SecretName = secret.SecretName,
+                    VaultId = _vaultOptions.VaultId
+                });
+                Base64SecretBundleContentDetails bundleContent = (Base64SecretBundleContentDetails)secretBundle.SecretBundle.SecretBundleContent;
+                var secretValue = Encoding.UTF8.GetString(Convert.FromBase64String(bundleContent.Content));
+                data.Add(secret.SecretName, secretValue);
+            }
+            listSecretsRequest.Page = secrets.OpcNextPage;
+        }
+        while (!string.IsNullOrWhiteSpace(listSecretsRequest.Page));
 
-        var getSecretRequest = new GetSecretRequest{
-            SecretId = secrets.Items.First().Id,
-        };  
-        var secret = await _vaultsClient.GetSecret(getSecretRequest).ConfigureAwait(false);
-        var currentVersion = secret.Secret.CurrentVersionNumber;
-
-        var getSecretVersionRequest = new GetSecretVersionRequest{
-            SecretId = secrets.Items.First().Id,
-            SecretVersionNumber = currentVersion,
-        };
-        var secretContents = await _vaultsClient.GetSecretVersion(getSecretVersionRequest).ConfigureAwait(false);
-        var secretBundle = await _secretsClient.GetSecretBundleByName(new GetSecretBundleByNameRequest{
-            SecretName = "mysecret1",
-            VaultId = _vaultOptions.VaultId
-        });
-        Base64SecretBundleContentDetails bundleContent = (Base64SecretBundleContentDetails)secretBundle.SecretBundle.SecretBundleContent;
-        var secretValue = Encoding.UTF8.GetString(Convert.FromBase64String(bundleContent.Content));
-        throw new NotImplementedException();    
+        Data = data;
     }
 }

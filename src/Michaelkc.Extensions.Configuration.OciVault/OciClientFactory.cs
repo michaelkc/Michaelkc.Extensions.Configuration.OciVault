@@ -7,7 +7,7 @@ namespace Michaelkc.Extensions.Configuration.OciVault;
 
 public static class OciClientFactory
 {
-    public static VaultsClient CreateVaultsClientFromConfig(OciAuthConfig config, ClientConfiguration clientConfiguration = null, string endpoint = null)
+    public static VaultsClient CreateVaultsClientFromConfig(OciVaultConfigurationOptions config, ClientConfiguration clientConfiguration = null, string endpoint = null)
     {
         var provider = new SimpleAuthenticationDetailsProvider
         {
@@ -20,7 +20,7 @@ public static class OciClientFactory
         return new VaultsClient(provider, clientConfiguration, endpoint);
     }
 
-    public static SecretsClient CreateSecretsClientFromConfig(OciAuthConfig config, ClientConfiguration clientConfiguration = null, string endpoint = null)
+    public static SecretsClient CreateSecretsClientFromConfig(OciVaultConfigurationOptions config, ClientConfiguration clientConfiguration = null, string endpoint = null)
     {
         var provider = new SimpleAuthenticationDetailsProvider
         {

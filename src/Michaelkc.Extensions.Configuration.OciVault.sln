@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Michaelkc.Extensions.Configuration.OciVault", "Michaelkc.Extensions.Configuration.OciVault\Michaelkc.Extensions.Configuration.OciVault.csproj", "{E2A8C775-A595-454C-88B3-7F63A8291FE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{0669128F-1AFF-4638-9300-728B80A74428}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E2A8C775-A595-454C-88B3-7F63A8291FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2A8C775-A595-454C-88B3-7F63A8291FE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2A8C775-A595-454C-88B3-7F63A8291FE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0669128F-1AFF-4638-9300-728B80A74428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0669128F-1AFF-4638-9300-728B80A74428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0669128F-1AFF-4638-9300-728B80A74428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0669128F-1AFF-4638-9300-728B80A74428}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
